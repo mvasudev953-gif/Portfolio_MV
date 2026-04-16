@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mothkupalli Vasudev — Operations Team Lead</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #7c3aed;
+    --purple-light: #a78bfa;
+    --purple-dark: #4c1d95;
+    --purple-glow: rgba(124, 58, 237, 0.15);
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --card: #1a1a26;
+    --card-border: rgba(124, 58, 237, 0.2);
+    --text: #f0eeff;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+    --accent: #06d6a0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 2px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(124,58,237,0.1);
+  }
+  .nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--purple-light), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-muted); font-size: 0.875rem; font-weight: 500;
+    transition: color 0.3s; letter-spacing: 0.02em;
+  }
+  .nav-links a:hover { color: var(--purple-light); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; padding: 6rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(6,214,160,0.08) 0%, transparent 60%);
+  }
+  .grid-overlay {
+    position: absolute; inset: 0; z-index: 0; opacity: 0.04;
+    background-image: linear-gradient(rgba(124,58,237,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 900px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3);
+    padding: 0.4rem 1.2rem; border-radius: 100px;
+    font-size: 0.8rem; color: var(--purple-light); font-weight: 500;
+    margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.5)} }
+  .hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.03em; margin-bottom: 0.5rem;
+  }
+  .hero-name .highlight {
+    background: linear-gradient(135deg, var(--purple-light) 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-title {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--text-muted); font-weight: 400; margin-bottom: 1.5rem;
+  }
+  .hero-tagline {
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: var(--text-dim); max-width: 680px; margin: 0 auto 2.5rem;
+    line-height: 1.8;
+  }
+  .hero-tagline strong { color: var(--purple-light); font-weight: 500; }
+  .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--purple); color: #fff;
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 600; font-size: 0.95rem; text-decoration: none;
+    transition: all 0.3s; border: none; cursor: pointer;
+    box-shadow: 0 0 30px rgba(124,58,237,0.3);
+  }
+  .btn-primary:hover { background: #6d28d9; transform: translateY(-2px); box-shadow: 0 0 40px rgba(124,58,237,0.5); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: transparent; color: var(--text);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 600; font-size: 0.95rem; text-decoration: none;
+    transition: all 0.3s; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--purple-light); color: var(--purple-light); transform: translateY(-2px); }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem;
+    margin-top: 4rem; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem; font-weight: 700; color: var(--purple-light);
+    display: block;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* SECTIONS */
+  section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700;
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .section-title span { color: var(--purple-light); }
+  .section-divider {
+    width: 60px; height: 3px; background: linear-gradient(90deg, var(--purple), var(--accent));
+    border-radius: 2px; margin-bottom: 3rem;
+  }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: center; }
+  .about-avatar-wrap { position: relative; }
+  .about-avatar {
+    width: 280px; height: 280px; border-radius: 24px;
+    background: linear-gradient(135deg, var(--card) 0%, var(--bg3) 100%);
+    border: 1px solid var(--card-border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .about-avatar::before {
+    content: ''; position: absolute; inset: -1px;
+    background: linear-gradient(135deg, var(--purple), transparent 50%, var(--accent));
+    border-radius: 24px; z-index: -1;
+  }
+  .avatar-initials {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 4rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--purple-light), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .avatar-role { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+  .about-badge-row {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem;
+  }
+  .chip {
+    background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25);
+    color: var(--purple-light); padding: 0.3rem 0.85rem; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 500;
+  }
+  .about-text p { color: var(--text-muted); line-height: 1.85; margin-bottom: 1.2rem; font-size: 1rem; }
+  .about-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+  .highlight-item {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1rem 1.2rem;
+  }
+  .highlight-item .icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+  .highlight-item strong { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); }
+  .highlight-item span { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* SKILLS */
+  #skills { background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); max-width: 100%; padding: 6rem 0; }
+  #skills .inner { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+  .skill-card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .skill-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--accent));
+  }
+  .skill-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(124,58,237,0.15); }
+  .skill-card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .skill-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); }
+  .skill-tag-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skill-tag {
+    background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2);
+    color: var(--text-muted); padding: 0.25rem 0.7rem; border-radius: 6px;
+    font-size: 0.78rem; font-weight: 500;
+  }
+
+  /* PROFICIENCY BARS */
+  .prof-bars { margin-top: 3rem; }
+  .prof-item { margin-bottom: 1.5rem; }
+  .prof-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+  .prof-name { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+  .prof-pct { font-size: 0.85rem; color: var(--purple-light); font-weight: 600; }
+  .prof-track { background: rgba(255,255,255,0.06); border-radius: 100px; height: 6px; overflow: hidden; }
+  .prof-fill {
+    height: 100%; border-radius: 100px;
+    background: linear-gradient(90deg, var(--purple), var(--accent));
+    width: 0; transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* EXPERIENCE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(180deg, var(--purple), var(--accent));
+    border-radius: 2px;
+  }
+  .timeline-item { position: relative; margin-bottom: 3rem; }
+  .timeline-dot {
+    position: absolute; left: -2.5rem; top: 0.4rem;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--purple); border: 2px solid var(--bg);
+    box-shadow: 0 0 12px rgba(124,58,237,0.6);
+  }
+  .exp-card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 1.75rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .exp-card:hover { border-color: rgba(124,58,237,0.5); box-shadow: 0 10px 30px rgba(124,58,237,0.1); }
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .exp-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); }
+  .exp-company { color: var(--purple-light); font-weight: 500; font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .exp-date {
+    background: rgba(6,214,160,0.1); border: 1px solid rgba(6,214,160,0.25);
+    color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 500; white-space: nowrap;
+  }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0; }
+  .exp-tag {
+    background: rgba(124,58,237,0.08); color: var(--purple-light);
+    padding: 0.2rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 500;
+  }
+  .exp-bullets { list-style: none; margin-top: 1rem; }
+  .exp-bullets li {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;
+    padding: 0.3rem 0 0.3rem 1.25rem; position: relative;
+  }
+  .exp-bullets li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--purple-light); font-size: 0.75rem; top: 0.45rem;
+  }
+
+  /* ACHIEVEMENTS */
+  #achievements { background: var(--bg2); max-width: 100%; padding: 6rem 0; }
+  #achievements .inner { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .achieve-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .achieve-card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 1.75rem;
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .achieve-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(124,58,237,0.12); }
+  .achieve-icon {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+  }
+  .achieve-body h4 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+  .achieve-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* EDUCATION */
+  .edu-card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 2rem;
+    display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center;
+    max-width: 700px;
+  }
+  .edu-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,214,160,0.1));
+    border: 1px solid rgba(124,58,237,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 2rem;
+  }
+  .edu-degree { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .edu-field { color: var(--purple-light); font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .edu-institute { color: var(--text-muted); font-size: 0.85rem; }
+  .edu-meta { display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; }
+  .edu-badge {
+    background: rgba(6,214,160,0.1); border: 1px solid rgba(6,214,160,0.25);
+    color: var(--accent); padding: 0.2rem 0.7rem; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 500;
+  }
+
+  /* CONTACT */
+  #contact { background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%); max-width: 100%; padding: 6rem 0; }
+  #contact .inner { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .contact-info p { color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin-bottom: 2rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1rem 1.25rem;
+    text-decoration: none; color: var(--text);
+    transition: all 0.3s;
+  }
+  .contact-link:hover { border-color: var(--purple-light); transform: translateX(4px); }
+  .contact-link-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(124,58,237,0.15);
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-link-text { font-size: 0.85rem; color: var(--text-dim); }
+  .contact-link-val { font-size: 0.95rem; font-weight: 500; color: var(--text); }
+  .contact-cta-box {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 20px; padding: 2.5rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .contact-cta-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.15), transparent 70%);
+  }
+  .contact-cta-box h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; position: relative;
+  }
+  .contact-cta-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; position: relative; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-dim); font-size: 0.85rem;
+  }
+  footer span { color: var(--purple-light); }
+
+  /* FADE IN */
+  .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,15,0.98); align-items: center; justify-content: center; gap: 2rem; font-size: 1.2rem; z-index: 200; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; z-index: 300; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .about-avatar { width: 200px; height: 200px; margin: 0 auto; }
+    .about-highlights { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-stats { gap: 2rem; }
+    .edu-card { grid-template-columns: 1fr; text-align: center; }
+    .edu-icon { margin: 0 auto; }
+    .edu-meta { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">MV</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+    <li><a href="#achievements" onclick="closeMenu()">Achievements</a></li>
+    <li><a href="#education" onclick="closeMenu()">Education</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Available for Opportunities</div>
+    <h1 class="hero-name">Mothkupalli<br><span class="highlight">Vasudev</span></h1>
+    <p class="hero-title">Operations Team Lead · Hyderabad, India</p>
+    <p class="hero-tagline">
+      Leading <strong>30+ member teams</strong> to <strong>100% KPI & SLA delivery</strong> ·
+      Risk & Fraud Operations · Process Optimization · <strong>Best Performer 2025</strong>
+    </p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92V19a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 010 1.18 2 2 0 012 0h2.09a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L5.27 7.7a16 16 0 006.99 7l1.07-1.07a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Get In Touch
+      </a>
+      <a href="#experience" class="btn-secondary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        View Experience
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">4.3+</span><span class="stat-label">Years at Wipro</span></div>
+      <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Team Size Led</span></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">KPI Attainment</span></div>
+      <div class="stat"><span class="stat-num">1,430+</span><span class="stat-label">Cases/Month Resolved</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="fade-in">
+    <span class="section-label">Who I Am</span>
+    <h2 class="section-title">About <span>Me</span></h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+      <div class="about-avatar-wrap">
+        <div class="about-avatar">
+          <div class="avatar-initials">MV</div>
+          <div class="avatar-role">Operations Team Lead</div>
+        </div>
+        <div class="about-badge-row">
+          <span class="chip">🏆 Best Performer 2025</span>
+          <span class="chip">📍 Hyderabad, India</span>
+          <span class="chip">✅ Open to Work</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <p>I'm an Operations Team Lead with <strong style="color:var(--text)">4.3+ years at Wipro Limited</strong>, where I currently oversee a high-performing 30-member operations team specializing in Risk and Fraud Operations. I was promoted from Senior Associate to Team Lead based on consistent excellence over 3+ years.</p>
+        <p>My core strength lies in driving measurable results — consistently achieving <strong style="color:var(--text)">100% KPI and SLA targets</strong>, reducing TAT violations, improving team retention, and building structured career pathing programs that boost productivity and engagement.</p>
+        <p>Recognized as <strong style="color:var(--purple-light)">Best Performer 2025</strong> at Wipro Limited, I bring a unique blend of operational rigor, people-first leadership, and data-driven decision-making to every team I lead.</p>
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <div class="icon">🎯</div>
+            <strong>100% KPI & SLA</strong>
+            <span>Consistent attainment across all targets</span>
+          </div>
+          <div class="highlight-item">
+            <div class="icon">👥</div>
+            <strong>30-Member Team</strong>
+            <span>Leading risk & fraud operations</span>
+          </div>
+          <div class="highlight-item">
+            <div class="icon">📈</div>
+            <strong>10% Retention Boost</strong>
+            <span>Through career pathing programs</span>
+          </div>
+          <div class="highlight-item">
+            <div class="icon">⚡</div>
+            <strong>10% TAT Reduction</strong>
+            <span>Optimized scheduling & delegation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="max-width:100%;padding:6rem 0;">
+  <div class="inner">
+    <div class="fade-in">
+      <span class="section-label">Expertise</span>
+      <h2 class="section-title">Core <span>Skills</span></h2>
+      <div class="section-divider"></div>
+      <div class="skills-grid">
+        <div class="skill-card fade-in">
+          <div class="skill-card-icon">🎯</div>
+          <h3>Leadership & Operations</h3>
+          <div class="skill-tag-grid">
+            <span class="skill-tag">Team Supervision</span>
+            <span class="skill-tag">Front-line Coaching</span>
+            <span class="skill-tag">Performance Evaluations</span>
+            <span class="skill-tag">Career Pathing</span>
+            <span class="skill-tag">Incentive Programs</span>
+            <span class="skill-tag">Employee Engagement</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-card-icon">🛡️</div>
+          <h3>Risk, Fraud & Operations</h3>
+          <div class="skill-tag-grid">
+            <span class="skill-tag">Risk Classification</span>
+            <span class="skill-tag">Fraud Detection</span>
+            <span class="skill-tag">KPI & SLA Management</span>
+            <span class="skill-tag">Escalation Handling</span>
+            <span class="skill-tag">Process Optimization</span>
+            <span class="skill-tag">WFM Coordination</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-card-icon">📊</div>
+          <h3>Analytical & Technical</h3>
+          <div class="skill-tag-grid">
+            <span class="skill-tag">Root Cause Analysis</span>
+            <span class="skill-tag">Scorecard Development</span>
+            <span class="skill-tag">Statistical Reporting</span>
+            <span class="skill-tag">MS Excel (Advanced)</span>
+            <span class="skill-tag">Google Workspace</span>
+            <span class="skill-tag">MS PowerPoint</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-card-icon">🤝</div>
+          <h3>Collaboration & Soft Skills</h3>
+          <div class="skill-tag-grid">
+            <span class="skill-tag">Stakeholder Management</span>
+            <span class="skill-tag">Cross-dept Collaboration</span>
+            <span class="skill-tag">Conflict Resolution</span>
+            <span class="skill-tag">Relationship Building</span>
+            <span class="skill-tag">QA Processes</span>
+            <span class="skill-tag">Scheduling & Staffing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prof-bars" style="max-width:700px;margin-top:3rem;">
+        <div class="prof-item">
+          <div class="prof-header"><span class="prof-name">KPI & SLA Management</span><span class="prof-pct">100%</span></div>
+          <div class="prof-track"><div class="prof-fill" data-width="100"></div></div>
+        </div>
+        <div class="prof-item">
+          <div class="prof-header"><span class="prof-name">Team Leadership & Coaching</span><span class="prof-pct">95%</span></div>
+          <div class="prof-track"><div class="prof-fill" data-width="95"></div></div>
+        </div>
+        <div class="prof-item">
+          <div class="prof-header"><span class="prof-name">Risk & Fraud Operations</span><span class="prof-pct">95%</span></div>
+          <div class="prof-track"><div class="prof-fill" data-width="95"></div></div>
+        </div>
+        <div class="prof-item">
+          <div class="prof-header"><span class="prof-name">Process Optimization</span><span class="prof-pct">90%</span></div>
+          <div class="prof-track"><div class="prof-fill" data-width="90"></div></div>
+        </div>
+        <div class="prof-item">
+          <div class="prof-header"><span class="prof-name">Data Analysis & Reporting</span><span class="prof-pct">88%</span></div>
+          <div class="prof-track"><div class="prof-fill" data-width="88"></div></div>
+        </div>
+        <div class="prof-item">
+          <div class="prof-header"><span class="prof-name">Stakeholder Management</span><span class="prof-pct">90%</span></div>
+          <div class="prof-track"><div class="prof-fill" data-width="90"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="fade-in">
+    <span class="section-label">Career Journey</span>
+    <h2 class="section-title">Work <span>Experience</span></h2>
+    <div class="section-divider"></div>
+    <div class="timeline">
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-title">Operations Team Lead</div>
+              <div class="exp-company">Wipro Limited</div>
+            </div>
+            <div class="exp-date">Feb 2025 – Feb 2026</div>
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Operations Management</span>
+            <span class="exp-tag">KPI Management</span>
+            <span class="exp-tag">SLA Management</span>
+            <span class="exp-tag">Risk Operations</span>
+            <span class="exp-tag">Fraud Detection</span>
+          </div>
+          <ul class="exp-bullets">
+            <li>Led a 30-member operations team, delivering consistent quality and SLA adherence across all performance metrics.</li>
+            <li>Built individual career pathing plans and ran structured on-boarding and skill-building programs — improving retention and productivity by 10%.</li>
+            <li>Drove 100% KPI and SLA attainment across all daily and monthly performance targets without exception.</li>
+            <li>Analyzed scorecards and performance data to identify root causes and implement corrective actions, reducing error rates by 10%.</li>
+            <li>Streamlined case assignment protocols to reduce TAT violations by 10% and achieve 100% on-time completion.</li>
+            <li>Created and ran incentive programs with real-time coaching to sustain team engagement and peak performance.</li>
+            <li>Coordinated with WFM and Operations Support for optimal staffing and uninterrupted service delivery.</li>
+            <li>Represented the team in partner and stakeholder review meetings with data-backed operational insights.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot" style="background:var(--accent);box-shadow:0 0 12px rgba(6,214,160,0.6);"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-title">Senior Associate — Risk & Fraud Operations</div>
+              <div class="exp-company">Wipro Limited</div>
+            </div>
+            <div class="exp-date">Nov 2021 – Jan 2025</div>
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Payment Fraud</span>
+            <span class="exp-tag">Account Risk</span>
+            <span class="exp-tag">Escalation Handling</span>
+            <span class="exp-tag">Quality Assurance</span>
+          </div>
+          <ul class="exp-bullets">
+            <li>Managed high-stakes escalated cases involving payment fraud and account risk, resolving 1,430+ cases monthly within SLA.</li>
+            <li>Maintained 100% accuracy in risk classification in collaboration with quality teams across 3+ years of tenure.</li>
+            <li>Delivered consistent high performance recognized through multiple performance reviews, leading to promotion to Team Lead.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" style="max-width:100%;padding:6rem 0;">
+  <div class="inner">
+    <div class="fade-in">
+      <span class="section-label">Recognition</span>
+      <h2 class="section-title">Key <span>Achievements</span></h2>
+      <div class="section-divider"></div>
+      <div class="achieve-grid">
+        <div class="achieve-card fade-in">
+          <div class="achieve-icon">🏆</div>
+          <div class="achieve-body">
+            <h4>Best Performer 2025 — Wipro Limited</h4>
+            <p>Awarded for outstanding team leadership, people development, and operational excellence across the year.</p>
+          </div>
+        </div>
+        <div class="achieve-card fade-in">
+          <div class="achieve-icon">✅</div>
+          <div class="achieve-body">
+            <h4>100% KPI & SLA Attainment</h4>
+            <p>Consistently achieved all performance targets while managing a 30-member operations team — zero misses.</p>
+          </div>
+        </div>
+        <div class="achieve-card fade-in">
+          <div class="achieve-icon">⬇️</div>
+          <div class="achieve-body">
+            <h4>10% Reduction in TAT Violations</h4>
+            <p>Achieved through optimized scheduling, delegation strategies, and streamlined case assignment protocols.</p>
+          </div>
+        </div>
+        <div class="achieve-card fade-in">
+          <div class="achieve-icon">📈</div>
+          <div class="achieve-body">
+            <h4>10% Boost in Team Retention</h4>
+            <p>Improved retention and productivity through structured career pathing and employee engagement initiatives.</p>
+          </div>
+        </div>
+        <div class="achieve-card fade-in">
+          <div class="achieve-icon">🚀</div>
+          <div class="achieve-body">
+            <h4>Promoted to Team Lead</h4>
+            <p>Earned promotion from Senior Associate to Team Lead based on 3+ years of consistent high performance.</p>
+          </div>
+        </div>
+        <div class="achieve-card fade-in">
+          <div class="achieve-icon">🎯</div>
+          <div class="achieve-body">
+            <h4>1,430+ Monthly Case Resolution</h4>
+            <p>Resolved 1,430+ high-stakes escalated fraud and risk cases monthly within SLA with 100% accuracy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="fade-in">
+    <span class="section-label">Academic Background</span>
+    <h2 class="section-title">My <span>Education</span></h2>
+    <div class="section-divider"></div>
+    <div class="edu-card">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-degree">Bachelor of Technology</div>
+        <div class="edu-field">Computer Science Engineering</div>
+        <div class="edu-institute">Vidya Jyothi Institute of Technology, Hyderabad</div>
+        <div class="edu-meta">
+          <span class="edu-badge">2016 – 2020</span>
+          <span class="edu-badge">CGPA: 8.45 / 10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="max-width:100%;padding:6rem 0;">
+  <div class="inner">
+    <div class="fade-in">
+      <span class="section-label">Let's Connect</span>
+      <h2 class="section-title">Get In <span>Touch</span></h2>
+      <div class="section-divider"></div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p>I'm currently open to new opportunities in operations leadership, team management, risk operations, and related domains. Whether you have a role in mind or just want to connect — I'd love to hear from you.</p>
+          <div class="contact-links">
+            <a href="mailto:mvasudev953@gmail.com" class="contact-link">
+              <div class="contact-link-icon">✉️</div>
+              <div>
+                <div class="contact-link-text">Email</div>
+                <div class="contact-link-val">mvasudev953@gmail.com</div>
+              </div>
+            </a>
+            <a href="https://www.linkedin.com/in/mothkupallivasudev/" target="_blank" class="contact-link">
+              <div class="contact-link-icon">💼</div>
+              <div>
+                <div class="contact-link-text">LinkedIn</div>
+                <div class="contact-link-val">linkedin.com/in/mothkupallivasudev</div>
+              </div>
+            </a>
+            <a href="tel:+919030695321" class="contact-link">
+              <div class="contact-link-icon">📞</div>
+              <div>
+                <div class="contact-link-text">Phone</div>
+                <div class="contact-link-val">+91 9030695321</div>
+              </div>
+            </a>
+            <div class="contact-link" style="cursor:default;">
+              <div class="contact-link-icon">📍</div>
+              <div>
+                <div class="contact-link-text">Location</div>
+                <div class="contact-link-val">Hyderabad, India</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-cta-box">
+          <h3>Open to Opportunities</h3>
+          <p>Looking for roles in operations leadership, risk management, people management, and process optimization. Let's build something great together.</p>
+          <a href="mailto:mvasudev953@gmail.com" class="btn-primary" style="display:inline-flex;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send an Email
+          </a>
+          <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.06);">
+            <p style="font-size:0.8rem;color:var(--text-dim);margin:0;">Best Performer 2025 · 4.3+ Years at Wipro · 30-Member Team Lead</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Designed & built for <span>Mothkupalli Vasudev</span> · Operations Team Lead · Hyderabad, India · 2025</p>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('navLinks').classList.remove('open');
+  }
+
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Animate skill bars
+        e.target.querySelectorAll('.prof-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Also animate bars when parent section visible
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.prof-fill').forEach(bar => {
+          setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 300);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const skillsSection = document.querySelector('#skills');
+  if (skillsSection) barObserver.observe(skillsSection);
+
+  // Active nav link highlight
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--purple-light)' : '';
+    });
+  });
+</script>
+</body>
+</html>
